@@ -14,7 +14,7 @@
 
 **Clone the repository**
 ```
-git clone https://github.com/romulosilvestre/gabarito-api-dev-csharp.git
+git clone https://github.com/kaifritz02/VoeAirlinesAPI.git
 ```
 
 **Restore the packages**
