@@ -1,36 +1,38 @@
-# Projeto ASP.NET Core Web API para gerenciamento da VoeAirlines By Embraery
+## ASP.NET Core Web API project for managing VoeAirlines By Embraery
 
-## Como executar o projeto
+## How to run the project
 
-**Clonar o repositório**
+**Clone the repository**
 ```
 git clone https://github.com/romulosilvestre/gabarito-api-dev-csharp.git
 ```
 
-**Restaurar os pacotes**
+**Restore the packages**
 
-Navegar para a pasta do projeto clonado e executar o seguinte comando:
+Navigate to the cloned project folder and run the following command:
 
 ```
 dotnet restore
 ```
 
-**Executar a aplicação**
+**Run the application**
 
-Executar o seguinte comando ou utilizar a ferramenta de Debug do Visual Studio u Visual Studio Code (normalmente pressionando F5):
+Run the following command or use the Visual Studio u Visual Studio Code Debug tool (usually by pressing F5):
 ```
 dotnet run
 ```
 
-## Como testar a API
+## How to test the API
 
-**Acessar a interface de teste do Swagger***
-A UI do Swagger estará disponível na URL https://localhost:[porta]/swagger (a porta pode variar e deve ser observada no terminal ao executar o projeto).
+**Access the Swagger test interface**
+The Swagger UI will be available at the URL https://localhost:[port]/swagger (the port may vary and should be observed in the terminal when running the project).
 
-**Consumir os endpoints**
-Sugestão de ordem para testar a aplicação:
+**Consume endpoints**
+Suggested order for testing the application:
 
-1) Criar, editar e excluir Aeronaves
-2) Criar, editar e excluir Manutenção
-3) Criar, editar e excluir Piloto
-4) Criar, editar e excluir Voo
+1) Create, edit and delete Aeronaves
+2) Create, edit, and delete Manutencao
+3) Create, edit, and delete Piloto
+4) Create, edit, and delete Voo
+
+
