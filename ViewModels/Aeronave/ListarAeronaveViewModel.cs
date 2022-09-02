@@ -1,12 +1,10 @@
-//ID, CODIGO, MODELO
-//não precisa do fabricante.
-
 namespace VoeAirlines.ViewModels;
+
 public class ListarAeronaveViewModel
 {
-    public ListarAeronaveViewModel(int id,string modelo,string codigo)
+    public ListarAeronaveViewModel(int id, string modelo, string codigo)
     {
-        Id = id;    
+        Id = id;
         Modelo = modelo;
         Codigo = codigo;
     }

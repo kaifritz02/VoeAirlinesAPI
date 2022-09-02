@@ -1,53 +1,60 @@
-using Microsoft.AspNetCore.Mvc;
 using VoeAirlines.Services;
-using VoeAirlines.ViewModels.Piloto;
+using VoeAirlines.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
-namespace VoeAirlines.Controllers
+namespace VoeAirlines.Controllers;
+
+[Route("api/pilotos")]
+[ApiController]
+public class PilotoController: ControllerBase
 {
-    [Route("api/pilotos")]
-    [ApiController]
-    public class PilotoController : ControllerBase
+    private readonly PilotoService _pilotoService;
+
+    public PilotoController(PilotoService pilotoService)
     {
-        private readonly PilotoService _pilotoService;
+        _pilotoService = pilotoService;
+    }
 
-        public PilotoController(PilotoService pilotoService)
-        {
-            _pilotoService = pilotoService;
-        }
+    [HttpPost]
+    public IActionResult AdicionarPiloto(AdicionarPilotoViewModel dados)
+    {
+        var piloto = _pilotoService.AdicionarPiloto(dados);
+        return Ok(piloto);
+    }
 
-        [HttpGet]
-        public IActionResult ListarPilotos()
-        {
-            var pilotos = _pilotoService.ListarPilotos();
-            return Ok(pilotos);
-        }
+    [HttpGet]
+    public IActionResult ListarPilotos()
+    {
+        return Ok(_pilotoService.ListarPilotos());
+    }
 
-        [HttpGet("{id:int}")]
-        public IActionResult ListarPilotosPorId(int id)
+    [HttpGet("{id}")]
+    public IActionResult ListarPilotoPeloId(int id)
+    {
+        var piloto = _pilotoService.ListarPilotoPeloId(id);
+
+        if (piloto != null)
         {
-            var piloto = _pilotoService.ListarPorId(id);
             return Ok(piloto);
         }
 
-        [HttpPost]
-        public IActionResult AdicionarPiloto(AdicionarPilotoViewModel dados)
-        {
-            var piloto = _pilotoService.AdicionarPiloto(dados);
-            return Created(nameof(AdicionarPiloto), piloto);
-        }
+        return NotFound();
+    }
 
-        [HttpPut("{id:int}")]
-        public IActionResult AtualizarPiloto(int id, AtualizarPilotoViewModel dados)
-        {
-            var piloto = _pilotoService.AtualizarPiloto(id, dados);
-            return Ok(piloto);
-        }
+    [HttpPut("{id}")]
+    public IActionResult AtualizarPiloto(int id, AtualizarPilotoViewModel dados)
+    {
+        if (id != dados.Id)
+            return BadRequest("O id informado na URL é diferente do id informado no corpo da requisição.");
 
-        [HttpDelete("{id:int}")]
-        public IActionResult RemoverPiloto(int id)
-        {
-            var piloto = _pilotoService.RemoverPiloto(id);
-            return Ok(piloto);
-        }
+        var piloto = _pilotoService.AtualizarPiloto(dados);
+        return Ok(piloto);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult ExcluirPiloto(int id)
+    {
+        _pilotoService.ExcluirPiloto(id);
+        return NoContent();
     }
 }

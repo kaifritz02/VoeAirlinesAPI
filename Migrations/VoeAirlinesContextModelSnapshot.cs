@@ -17,7 +17,7 @@ namespace VoeAirlines.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -30,25 +30,20 @@ namespace VoeAirlines.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Celebridade")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Fabricante")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -96,8 +91,7 @@ namespace VoeAirlines.Migrations
                     b.Property<DateTime>("DataHora")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Observacao")
-                        .IsRequired()
+                    b.Property<string>("Observacoes")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -108,7 +102,7 @@ namespace VoeAirlines.Migrations
 
                     b.HasIndex("AeronaveId");
 
-                    b.ToTable("Manutencao", (string)null);
+                    b.ToTable("Manutencoes", (string)null);
                 });
 
             modelBuilder.Entity("VoeAirlines.Entities.Piloto", b =>
@@ -156,7 +150,8 @@ namespace VoeAirlines.Migrations
 
                     b.Property<string>("Destino")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<string>("Origem")
                         .IsRequired()

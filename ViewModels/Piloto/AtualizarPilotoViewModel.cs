@@ -1,16 +1,15 @@
-namespace VoeAirlines.ViewModels.Piloto
+namespace VoeAirlines.ViewModels;
+
+public class AtualizarPilotoViewModel
 {
-
-    public class AtualizarPilotoViewModel
+    public AtualizarPilotoViewModel(int id, string nome, string matricula)
     {
-        public AtualizarPilotoViewModel(string nome, string matricula)
-        {
-            Nome = nome;
-            Matricula = matricula;
-        }
-        public string Nome { get; set; }
-        public string Matricula { get; set; }
-
+        Id = id;
+        Nome = nome;
+        Matricula = matricula;
     }
-}
 
+    public int Id { get; set; }
+    public string Nome { get; set; }
+    public string Matricula { get; set; }
+}

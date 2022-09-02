@@ -1,24 +1,21 @@
 using VoeAirlines.Entities.Enums;
 
-namespace VoeAirlines.Entities
-{
-    public class Manutencao
-    {
-        public Manutencao(DateTime dataHora,TipoManutencao tipoManutencao , int aeronaveId, string? observacao = null)
-        {
+namespace VoeAirlines.Entities;
 
-            DataHora = dataHora;            
-            AeronaveId = aeronaveId;
-            this.TipoManutencao = tipoManutencao;
-            Observacao = observacao;
-        }
-        
-        public int Id { get; set; }
-        public DateTime DataHora { get; set; }
-        public TipoManutencao TipoManutencao { get; set; }
-        public string? Observacao { get; set; }
-        public int AeronaveId { get; set; }
-       
-        public Aeronave Aeronave { get; set; } = null!;
+public class Manutencao
+{
+    public Manutencao(DateTime dataHora, TipoManutencao tipo, int aeronaveId, string? observacoes = null)
+    {
+        DataHora = dataHora;
+        Observacoes = observacoes;
+        Tipo = tipo;
+        AeronaveId = aeronaveId;
     }
+
+    public int Id { get; set; }
+    public DateTime DataHora { get; set; }
+    public string? Observacoes { get; set; }
+    public TipoManutencao Tipo { get; set; }
+    public int AeronaveId { get; set; }
+    public Aeronave Aeronave { get; set; } = null!;
 }

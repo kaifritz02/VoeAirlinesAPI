@@ -1,61 +1,47 @@
-using Microsoft.AspNetCore.Mvc;
 using VoeAirlines.Services;
-using VoeAirlines.ViewModels.Manutencao;
+using VoeAirlines.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
-namespace VoeAirlines.Controllers
+namespace VoeAirlines.Controllers;
+
+[Route("api/manutencoes")]
+[ApiController]
+public class ManutencaoController: ControllerBase
 {
-    [Route("api/manutencao")]
-    [ApiController]
-    public class ManutencaoController : ControllerBase
+    private readonly ManutencaoService _manutencaoService;
+
+    public ManutencaoController(ManutencaoService manutencaoService)
     {
-        private readonly ManutencaoService _manutencaoService;
+        _manutencaoService = manutencaoService;
+    }
 
-        public ManutencaoController(ManutencaoService manutencaoService)
-        {
-            _manutencaoService = manutencaoService;
-        }
+    [HttpPost]
+    public IActionResult AdicionarManutencao(AdicionarManutencaoViewModel dados)
+    {
+        var manutencao = _manutencaoService.AdicionarManutencao(dados);
+        return Ok(manutencao);
+    }
 
-        [HttpGet]
-        public IActionResult ListarManutencao()
-        {
-            var manutencao = _manutencaoService.ListarManutencoes();
-            return Ok(manutencao);
-        }
+    [HttpGet]
+    public IActionResult ListarManutencoes(int aeronaveId)
+    {
+        return Ok(_manutencaoService.ListarManutencoes(aeronaveId));
+    }
 
-        [HttpGet("{id:int}")]
-        public IActionResult ListarPorId(int id)
-        {
-            var manutecao = _manutencaoService.ListarManutencaoPorId(id);
-            return Ok(manutecao);
-        }
+    [HttpPut("{id}")]
+    public IActionResult AtualizarManutencao(int id, AtualizarManutencaoViewModel dados)
+    {
+        if (id != dados.Id)
+            return BadRequest("O id informado na URL é diferente do id informado no corpo da requisição.");
 
-        [HttpGet("porAeronave/{aeronaveId}")]
-        public IActionResult ListarPorAeronave(int aeronaveId)
-        {
-            var manutencoes = _manutencaoService.ListarManutencoesPorAeronave(aeronaveId);
-            return Ok(manutencoes);
-        }
+        var manutencao = _manutencaoService.AtualizarManutencao(dados);
+        return Ok(manutencao);
+    }
 
-        [HttpPost]
-        public IActionResult AdicionarManutencao(AdicionarManutencaoViewModel dados) {
-            var manutencao = _manutencaoService.AdicionarManutencao(dados);
-            return Created(nameof(AdicionarManutencao), manutencao);
-        }
-
-        [HttpPut("{id:int}")]
-        public IActionResult AtualizarManutencao(int id, AtualizarManutencaoViewModel dados) 
-        {
-            var manutecao = _manutencaoService.AtualizarManutencao(id, dados);
-            return Ok(manutecao);
-        }
-
-        [HttpDelete("{id:int}")]
-        public IActionResult RemoverManutencao(int id)
-        {
-            var manutencao = _manutencaoService.RemoverManutencao(id);
-            return Ok(manutencao);
-        }
-
-
+    [HttpDelete("{id}")]
+    public IActionResult ExcluirManutencao(int id)
+    {
+        _manutencaoService.ExcluirManutencao(id);
+        return NoContent();
     }
 }

@@ -1,71 +1,85 @@
 using VoeAirlines.Contexts;
 using VoeAirlines.Entities;
-using VoeAirlines.ViewModels.Piloto;
+using VoeAirlines.Validators;
+using VoeAirlines.ViewModels;
+using FluentValidation;
 
-namespace VoeAirlines.Services
+namespace VoeAirlines.Services;
+
+public class PilotoService
 {
-    public class PilotoService
+    private readonly VoeAirlinesContext _context;
+    private readonly AdicionarPilotoValidator _adicionarPilotoValidator;
+    private readonly AtualizarPilotoValidator _atualizarPilotoValidator;
+    private readonly ExcluirPilotoValidator _excluirPilotoValidator;
+
+    public PilotoService(VoeAirlinesContext context, AdicionarPilotoValidator adicionarPilotoValidator, AtualizarPilotoValidator atualizarPilotoValidator, ExcluirPilotoValidator excluirPilotoValidator)
     {
-        private readonly VoeAirlinesContext _context;
+        _context = context;
+        _adicionarPilotoValidator = adicionarPilotoValidator;
+        _atualizarPilotoValidator = atualizarPilotoValidator;
+        _excluirPilotoValidator = excluirPilotoValidator;
+    }
 
-        public PilotoService(VoeAirlinesContext context)
+    public DetalhesPilotoViewModel AdicionarPiloto(AdicionarPilotoViewModel dados)
+    {
+        _adicionarPilotoValidator.ValidateAndThrow(dados);
+
+        var piloto = new Piloto(dados.Nome, dados.Matricula);
+
+        _context.Add(piloto);
+        _context.SaveChanges();
+
+        return new DetalhesPilotoViewModel(piloto.Id, piloto.Nome, piloto.Matricula);
+    } 
+
+    public IEnumerable<ListarPilotoViewModel> ListarPilotos()
+    {
+        return _context.Pilotos.Select(p => new ListarPilotoViewModel(p.Id, p.Nome));
+    }
+
+    public DetalhesPilotoViewModel? ListarPilotoPeloId(int id)
+    {
+        var piloto = _context.Pilotos.Find(id);
+
+        if (piloto != null)
         {
-            _context = context;
+            return new DetalhesPilotoViewModel(piloto.Id, piloto.Nome, piloto.Matricula);
         }
 
-        public DetalhesPilotoViewModel AdicionarPiloto(AdicionarPilotoViewModel dados)
+        return null;
+    }
+
+    public DetalhesPilotoViewModel? AtualizarPiloto(AtualizarPilotoViewModel dados)
+    {
+        _atualizarPilotoValidator.ValidateAndThrow(dados);
+
+        var piloto = _context.Pilotos.Find(dados.Id);
+
+        if (piloto != null)
         {
-            var piloto = new Piloto(dados.Nome, dados.Matricula);
-            _context.Add(piloto);
+            piloto.Nome = dados.Nome;
+            piloto.Matricula = dados.Matricula;
+
+            _context.Update(piloto);
             _context.SaveChanges();
-            return new DetalhesPilotoViewModel(piloto.Id, piloto.Nome, piloto.Matricula); 
+
+            return new DetalhesPilotoViewModel(piloto.Id, piloto.Nome, piloto.Matricula);
         }
 
-        public DetalhesPilotoViewModel? AtualizarPiloto(int id, AtualizarPilotoViewModel dados)
-        {
-            var piloto = _context.Pilotos.Find(id);
-            if (piloto != null)
-            {
-                if (id == piloto.Id)
-                {
-                    piloto.Nome = dados.Nome;
-                    piloto.Matricula = dados.Matricula;
-                    _context.Update(piloto);
-                    _context.SaveChanges();
-                    return new DetalhesPilotoViewModel(piloto.Id, piloto.Nome, piloto.Matricula);
-                }
-            }
-            return null;
-        }
+        return null;
+    }
 
-        public IEnumerable<ListarPilotoViewModel> ListarPilotos()
-        {
-            return _context.Pilotos.Select(x => new ListarPilotoViewModel(x.Id, x.Nome, x.Matricula));
-        }
+    public void ExcluirPiloto(int id)
+    {
+        _excluirPilotoValidator.ValidateAndThrow(id);
 
-        public ListarPilotoViewModel? ListarPorId(int id)
-        {
-            var piloto = _context.Pilotos.Find(id);
-            if (piloto != null)
-            {
-                return new ListarPilotoViewModel(piloto.Id, piloto.Nome, piloto.Matricula);
-            }
-            return null;
-        }
+        var piloto = _context.Pilotos.Find(id);
 
-        public DetalhesPilotoViewModel? RemoverPiloto(int id)
+        if (piloto != null)
         {
-            var piloto = _context.Pilotos.Find(id);
-            if (piloto != null)
-            {
-                if (id == piloto.Id)
-                {
-                    _context.Pilotos.Remove(piloto);
-                    _context.SaveChanges();
-                    return new DetalhesPilotoViewModel(piloto.Id, piloto.Nome, piloto.Matricula);
-                }
-            }
-            return null;
+            _context.Remove(piloto);
+            _context.SaveChanges();
         }
     }
 }
