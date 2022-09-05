@@ -19,7 +19,9 @@ public class VooService
     private readonly ExcluirVooValidator _excluirVooValidator;
     private readonly CancelarVooValidator _cancelarVooValidator;
     private readonly IConverter _converter;
-    public VooService(VoeAirlinesContext context, AdicionarVooValidator adicionarVooValidator, AtualizarVooValidator atualizarVooValidator, ExcluirVooValidator excluirVooValidator, CancelarVooValidator cancelarVooValidator, IConverter converter)
+
+    private readonly IHostEnvironment _hostEnvironment;
+    public VooService(VoeAirlinesContext context, AdicionarVooValidator adicionarVooValidator, AtualizarVooValidator atualizarVooValidator, ExcluirVooValidator excluirVooValidator, CancelarVooValidator cancelarVooValidator, IConverter converter, IHostEnvironment hostEnvironment)
     {
         _context = context;
         _adicionarVooValidator = adicionarVooValidator;
@@ -27,6 +29,7 @@ public class VooService
         _excluirVooValidator = excluirVooValidator;
         _cancelarVooValidator = cancelarVooValidator;
         _converter = converter;
+        this._hostEnvironment = hostEnvironment;
     }
 
     public DetalhesVooViewModel AdicionarVoo(AdicionarVooViewModel dados)
@@ -177,12 +180,14 @@ public class VooService
                                .Include(v => v.Piloto)
                                .Include(v => v.Cancelamento)
                                .FirstOrDefault(v => v.Id == id);
+        var path = _hostEnvironment.ContentRootPath + "\\banner-voeairlines.png";
 
         if (voo != null)
         {
             var builder = new StringBuilder();
 
-            builder.Append($"<h1 style='text-align: center'>Ficha do Voo { voo.Id.ToString().PadLeft(10, '0') }</h1>")
+            builder.Append($"<img src=\"{path}\" width = '1000' heigth = '494'/>")
+                   .Append($"<h1 style='text-align: center'>Ficha do Voo { voo.Id.ToString().PadLeft(10, '0') }</h1>")
                    .Append($"<hr>")
                    .Append($"<p><b>ORIGEM:</b> { voo.Origem } (saída em { voo.DataHoraPartida:dd/MM/yyyy} às { voo.DataHoraPartida:hh:mm})</p>")
                    .Append($"<p><b>DESTINO:</b> { voo.Destino} (chegada em { voo.DataHoraChegada:dd/MM/yyyy} às { voo.DataHoraChegada:hh:mm})</p>")

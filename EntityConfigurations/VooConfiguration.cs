@@ -14,11 +14,11 @@ public class VooConfiguration : IEntityTypeConfiguration<Voo>
 
         builder.Property(v => v.Origem)
                .IsRequired()
-               .HasMaxLength(3);
+               .HasMaxLength(20);
 
         builder.Property(v => v.Destino)
                .IsRequired()
-               .HasMaxLength(3);
+               .HasMaxLength(20);
 
         builder.Property(v => v.DataHoraPartida)
                .IsRequired();
